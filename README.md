@@ -5,7 +5,6 @@ Relevance may disappear with the update of fishing mechanics.
 I am writing this project primarily for myself, so support will not be regular.
 
 * USE IN YOUR OWN RISK \*
-* Swarm bait make catch more faster, so the fishing may got effect. \*
 
 ## What does this application do
 
