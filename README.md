@@ -22,6 +22,7 @@ Download zip file from:
 Original Author [ OUTDATED ]: [releases](https://github.com/Zombie-220/Fishing/releases)
 Reworked Version: [releases](https://github.com/LaoQiu-229/Fishing-Arcane-Odyssey)
 
+Download zip from latest release
 Extract, go to dist and double click "Auto Fishing.exe"
 
 ### How to start fishing
