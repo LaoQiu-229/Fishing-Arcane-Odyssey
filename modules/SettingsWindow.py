@@ -1,29 +1,19 @@
 from PyQt6 import QtWidgets, QtGui, QtCore
 import json
-import sys
-import os
 
 from modules.SimpleComponents import WindowTitleBar, Button, Entry, Label
 from modules.GlobalVariables import CSS, EXIT_ICON
 
-def resource_path(relative_path):
-    """Get absolute path to resource, works for dev and for PyInstaller"""
-    try:
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(os.path.dirname(sys.argv[0]))
-    return os.path.join(base_path, relative_path)
-
 class SettingsWindow(QtWidgets.QMainWindow):
     rodKey: int = 0
-    mealKey: int = 9
-    potionKey: int|str = 8
-    useMeal: bool = False
+    luminousKey: int = 9
+    potionKey: int = 8
+    useLuminous: bool = False
     usePotion: bool = False
     timeForTry: int = 22.5
-    mealTimer: int = 300
+    luminousTimer: int = 300
     potionTimer: int = 300
-    baitType: str = "Normal"
+    baitChoice: str = "Normal"
 
     def __init__(self, parent: QtWidgets.QMainWindow):
         super().__init__()
@@ -34,7 +24,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
         self.setWindowFlags(QtCore.Qt.WindowType.FramelessWindowHint | QtCore.Qt.WindowType.WindowStaysOnTopHint)
         self.setWindowTitle(self.title)
         self.setWindowIcon(QtGui.QIcon(self.icon))
-        self.setFixedSize(360, 280)
+        self.setFixedSize(360, 290)
         self.move(parent.pos().x() - 75, parent.height() + 10)
         self.setObjectName("Window")
         self.setStyleSheet(CSS)
@@ -57,18 +47,18 @@ class SettingsWindow(QtWidgets.QMainWindow):
         grid.addWidget(label_rodKey, 0, 0)
         grid.addWidget(self.__entry_rodKey, 0, 1, 1, 2)
 
-        label_mealKey = Label(self, 0, 0, 0, 0, "label", "Meal key")
-        label_mealKey.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
-        self.__button_useMeal = Button(self, "Use meal", 0, 0, 0, 0, "btn_red", self.changeMealFlag)
-        self.__entry_mealKey = Entry(self, 0, 0, 0, 0, "EMPTY", False, "entry_standart")
-        label_mealTimer = Label(self, 0, 0, 0, 0, "label", "Meal timer")
-        label_mealTimer.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
-        self.__entry_mealTimer = Entry(self, 0, 0, 0, 0, "EMPTY", False, "entry_standart")
-        grid.addWidget(label_mealKey, 1, 0)
-        grid.addWidget(self.__button_useMeal, 1, 1)
-        grid.addWidget(self.__entry_mealKey, 1, 2)
-        grid.addWidget(label_mealTimer, 2, 0)
-        grid.addWidget(self.__entry_mealTimer, 2, 1, 1, 2)
+        label_luminousKey = Label(self, 0, 0, 0, 0, "label", "Luminous key")
+        label_luminousKey.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
+        self.__button_useLuminous = Button(self, "Use luminous", 0, 0, 0, 0, "btn_red", self.changeLuminousFlag)
+        self.__entry_luminousKey = Entry(self, 0, 0, 0, 0, "EMPTY", False, "entry_standart")
+        label_luminousTimer = Label(self, 0, 0, 0, 0, "label", "Luminous timer")
+        label_luminousTimer.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
+        self.__entry_luminousTimer = Entry(self, 0, 0, 0, 0, "EMPTY", False, "entry_standart")
+        grid.addWidget(label_luminousKey, 1, 0)
+        grid.addWidget(self.__button_useLuminous, 1, 1)
+        grid.addWidget(self.__entry_luminousKey, 1, 2)
+        grid.addWidget(label_luminousTimer, 2, 0)
+        grid.addWidget(self.__entry_luminousTimer, 2, 1, 1, 2)
 
         label_potionKey = Label(self, 0, 0, 0, 0, "lable", "Potion key")
         label_potionKey.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
@@ -83,19 +73,17 @@ class SettingsWindow(QtWidgets.QMainWindow):
         grid.addWidget(label_potionTimer, 4, 0)
         grid.addWidget(self.__entry_potionTimer, 4, 1, 1, 2)
 
-        label_seaChoise = Label(self, 0, 0, 0, 0, "label", "Sea choice")
-        label_seaChoise.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
+        label_seaChoice = Label(self, 0, 0, 0, 0, "label", "Sea choice")
+        label_seaChoice.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
         self.__sea_combo = QtWidgets.QComboBox(self)
         self.__sea_combo.addItems(["Normal sea", "Dark sea"])
-        grid.addWidget(label_seaChoise, 5, 0)
+        grid.addWidget(label_seaChoice, 5, 0)
         grid.addWidget(self.__sea_combo, 5, 1, 1, 2)
 
         label_baitChoice = Label(self, 0, 0, 0, 0, "label", "Bait choice")
         label_baitChoice.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
-        label_baitChoice.setToolTip("Select bait type for automatic bait switching")
         self.__bait_combo = QtWidgets.QComboBox(self)
         self.__bait_combo.addItems(["Normal", "Swarm", "Giant", "Magic"])
-        self.__bait_combo.setToolTip("Select bait type for automatic bait switching")
         grid.addWidget(label_baitChoice, 6, 0)
         grid.addWidget(self.__bait_combo, 6, 1, 1, 2)
 
@@ -105,10 +93,10 @@ class SettingsWindow(QtWidgets.QMainWindow):
 
         self.readDataBase()
 
-    def changeMealFlag(self) -> None:
-        self.useMeal = not self.useMeal
-        if self.useMeal: self.__button_useMeal.setObjectName("btn_standart")
-        else: self.__button_useMeal.setObjectName("btn_red")
+    def changeLuminousFlag(self) -> None:
+        self.useLuminous = not self.useLuminous
+        if self.useLuminous: self.__button_useLuminous.setObjectName("btn_standart")
+        else: self.__button_useLuminous.setObjectName("btn_red")
         self.setStyleSheet(CSS)
 
     def changePotionFlag(self) -> None:
@@ -119,37 +107,37 @@ class SettingsWindow(QtWidgets.QMainWindow):
 
     def clearEntrys(self) -> None:
         self.__entry_rodKey.clear()
-        self.__entry_mealKey.clear()
+        self.__entry_luminousKey.clear()
         self.__entry_potionKey.clear()
-        self.__entry_mealTimer.clear()
+        self.__entry_luminousTimer.clear()
         self.__entry_potionTimer.clear()
 
         self.__entry_rodKey.setObjectName("entry_standart")
-        self.__entry_mealKey.setObjectName("entry_standart")
+        self.__entry_luminousKey.setObjectName("entry_standart")
         self.__entry_potionKey.setObjectName("entry_standart")
-        self.__entry_mealTimer.setObjectName("entry_standart")
+        self.__entry_luminousTimer.setObjectName("entry_standart")
         self.__entry_potionTimer.setObjectName("entry_standart")
         self.setStyleSheet(CSS)
 
         if self.timeForTry == 22.5: self.__sea_combo.setCurrentIndex(0)
         elif self.timeForTry == 30: self.__sea_combo.setCurrentIndex(1)
-        
-        # Reset bait combo to current value
-        bait_index = ["Normal", "Swarm", "Giant", "Magic"].index(self.baitType)
-        self.__bait_combo.setCurrentIndex(bait_index)
+
+        if self.baitChoice == "Normal": self.__bait_combo.setCurrentIndex(0)
+        elif self.baitChoice == "Swarm": self.__bait_combo.setCurrentIndex(1)
+        elif self.baitChoice == "Giant": self.__bait_combo.setCurrentIndex(2)
+        elif self.baitChoice == "Magic": self.__bait_combo.setCurrentIndex(3)
 
         self.close()
 
-    def checkEntry(self, variable: int|str, entry: Entry):
+    def checkEntry(self, variable: int, entry: Entry):
         newVariable = entry.text().lower()
-        if (newVariable in ['1','2','3','4','5','6','7','8','9','0']) or (entry == self.__entry_potionKey and newVariable == 'e') or (newVariable == ''):
+        if (newVariable in ['1','2','3','4','5','6','7','8','9','0']) or (newVariable == ''):
             if newVariable in ['1','2','3','4','5','6','7','8','9','0']:
                 newVariable = int(newVariable)
             elif newVariable == '':
                 newVariable = variable
             entry.setObjectName("entry_standart")
-            if entry == self.__entry_potionKey: entry.setPlaceholderText(f"0-9 or E, default is {newVariable}")
-            else: entry.setPlaceholderText(f"0-9, default is {newVariable}")
+            entry.setPlaceholderText(f"0-9, default is {newVariable}")
             self.setStyleSheet(CSS)
             return newVariable, True
         else:
@@ -179,80 +167,73 @@ class SettingsWindow(QtWidgets.QMainWindow):
 
     def saveChanges(self) -> None:
         check1 = self.checkEntry(self.rodKey, self.__entry_rodKey)
-        check2 = self.checkEntry(self.mealKey, self.__entry_mealKey)
+        check2 = self.checkEntry(self.luminousKey, self.__entry_luminousKey)
         check3 = self.checkEntry(self.potionKey, self.__entry_potionKey)
-        check4 = self.checkEntryWithTime(self.mealTimer, self.__entry_mealTimer)
+        check4 = self.checkEntryWithTime(self.luminousTimer, self.__entry_luminousTimer)
         check5 = self.checkEntryWithTime(self.potionTimer, self.__entry_potionTimer)
 
         self.rodKey = check1[0]
-        self.mealKey = check2[0]
+        self.luminousKey = check2[0]
         self.potionKey = check3[0]
-        self.mealTimer = check4[0]
+        self.luminousTimer = check4[0]
         self.potionTimer = check5[0]
         sea = self.__sea_combo.currentText()
         if sea == "Normal sea": self.timeForTry = 22.5
         elif sea == "Dark sea": self.timeForTry = 30
-        
-        # Get bait selection
-        self.baitType = self.__bait_combo.currentText()
+
+        self.baitChoice = self.__bait_combo.currentText()
 
         if check1[1] and check2[1] and check3[1] and check4[1] and check5[1]:
             self.clearEntrys()
 
-            with open(resource_path("DB.json"), "r") as file:
+            with open("DB.json", "r") as file:
                 data = json.loads(file.read())
                 screenSize = data["screenSize"][0]
 
             newDBobject = {
                 "settings": [{
                     "rodKey": self.rodKey,
-                    "mealKey": self.mealKey,
+                    "luminousKey": self.luminousKey,
                     "potionKey": self.potionKey,
-                    "useMeal": self.useMeal,
+                    "useLuminous": self.useLuminous,
                     "usePotion": self.usePotion,
-                    "mealTimer": self.mealTimer,
+                    "luminousTimer": self.luminousTimer,
                     "potionTimer": self.potionTimer,
                     "timeForTry": self.timeForTry,
-                    "baitType": self.baitType
+                    "baitChoice": self.baitChoice
                 }],
                 "screenSize": [screenSize]}
 
-            with open(resource_path('DB.json'), 'w') as file:
+            with open('DB.json', 'w') as file:
                 json.dump(newDBobject, file)
 
     def readDataBase(self) -> None:
-        file = open(resource_path("DB.json"), "r")
+        file = open("DB.json", "r")
         data = json.loads(file.read())
 
         settings = data['settings'][0]
 
         self.rodKey = settings["rodKey"]
-        self.mealKey = settings["mealKey"]
+        self.luminousKey = settings["luminousKey"]
         self.potionKey = settings["potionKey"]
-        self.useMeal = settings["useMeal"]
+        self.useLuminous = settings["useLuminous"]
         self.usePotion = settings["usePotion"]
-        self.mealTimer = settings["mealTimer"]
+        self.luminousTimer = settings["luminousTimer"]
         self.potionTimer = settings["potionTimer"]
         self.timeForTry = settings["timeForTry"]
-        
-        # Read baitType with default fallback
-        self.baitType = settings.get("baitType", "Normal")
+        self.baitChoice = settings.get("baitChoice", "Normal")
 
         self.__entry_rodKey.setPlaceholderText(f"0-9, default is {self.rodKey}")
-        self.__entry_mealKey.setPlaceholderText(f"0-9, default is {self.mealKey}")
-        self.__entry_potionKey.setPlaceholderText(f"0-9 or E, default is {self.potionKey}")
-        if self.useMeal: self.__button_useMeal.setObjectName("btn_standart")
+        self.__entry_luminousKey.setPlaceholderText(f"0-9, default is {self.luminousKey}")
+        self.__entry_potionKey.setPlaceholderText(f"0-9, default is {self.potionKey}")
+        if self.useLuminous: self.__button_useLuminous.setObjectName("btn_standart")
         if self.usePotion: self.__button_usePotion.setObjectName("btn_standart")
-        self.__entry_mealTimer.setPlaceholderText(f"{self.mealTimer} seconds")
+        self.__entry_luminousTimer.setPlaceholderText(f"{self.luminousTimer} seconds")
         self.__entry_potionTimer.setPlaceholderText(f"{self.potionTimer} seconds")
         if self.timeForTry == 22.5: self.__sea_combo.setCurrentIndex(0)
         elif self.timeForTry == 30: self.__sea_combo.setCurrentIndex(1)
-        
-        # Set bait combo box to saved value
-        try:
-            bait_index = ["Normal", "Swarm", "Giant", "Magic"].index(self.baitType)
-            self.__bait_combo.setCurrentIndex(bait_index)
-        except ValueError:
-            # If invalid bait type, default to Normal
-            self.__bait_combo.setCurrentIndex(0)
-            self.baitType = "Normal"
+
+        if self.baitChoice == "Normal": self.__bait_combo.setCurrentIndex(0)
+        elif self.baitChoice == "Swarm": self.__bait_combo.setCurrentIndex(1)
+        elif self.baitChoice == "Giant": self.__bait_combo.setCurrentIndex(2)
+        elif self.baitChoice == "Magic": self.__bait_combo.setCurrentIndex(3)

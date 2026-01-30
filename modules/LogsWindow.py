@@ -64,8 +64,8 @@ class LogsWindow(QtWidgets.QMainWindow):
             reason = "Session end"
         elif reasonType == "timeError":
             reason = "Waiting time is up"
-        elif reasonType == "consumeMeal":
-            reason = "Consume meal"
+        elif reasonType == "consumeLuminous":
+            reason = "Consume luminous"
         elif reasonType == "consumePotion":
             reason = "Consume potion"
 

@@ -1,21 +1,13 @@
 from PyQt6 import QtGui, QtCore, QtWidgets
 import sys, os
 
-def resource_path(relative_path):
-    """Get absolute path to resource, works for dev and for PyInstaller"""
-    try:
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(os.path.dirname(sys.argv[0]))
-    return os.path.join(base_path, relative_path)
-
 app = QtWidgets.QApplication(sys.argv)
 
-APP_ICON = QtGui.QPixmap(resource_path('images/icons/APP_ICON.png')).scaled(
+APP_ICON = QtGui.QPixmap(Rf'{os.path.abspath(os.path.dirname(sys.argv[0]))}\images\icons\APP_ICON.png').scaled(
                         30, 30, transformMode = QtCore.Qt.TransformationMode.SmoothTransformation)
-SETTING_ICON = QtGui.QIcon(resource_path('images/icons/SETTING_ICON.png'))
-EXIT_ICON = QtGui.QIcon(resource_path('images/icons/EXIT_ICON.png'))
-LOGS_ICON = QtGui.QIcon(resource_path('images/icons/LOGS_ICON.png'))
+SETTING_ICON = QtGui.QIcon(Rf'{os.path.abspath(os.path.dirname(sys.argv[0]))}\images\icons\SETTING_ICON.png')
+EXIT_ICON = QtGui.QIcon(Rf'{os.path.abspath(os.path.dirname(sys.argv[0]))}\images\icons\EXIT_ICON.png')
+LOGS_ICON = QtGui.QIcon(Rf'{os.path.abspath(os.path.dirname(sys.argv[0]))}\images\icons\LOGS_ICON.png')
 
 CSS = '''
     * {
@@ -29,6 +21,11 @@ CSS = '''
     #MainWindow, #TitleBar, #Window, QToolTip, #btn_fish_log, QComboBox, QComboBox QAbstractItemView, QComboBox::drop-down {
         background-color: rgb(21, 21, 21);
         border: 1px solid rgb(145, 145, 145);
+    }
+    QComboBox::drop-down {
+        image: url(./images/icons/DOWN_ARROW.png);
+        width: 20px;
+        height: 20px;
     }
     QToolTip {
         font-size: 12px;
@@ -102,7 +99,7 @@ CSS = '''
         background-color: rgb(41, 9, 41);
         border: 1px solid rgb(127, 0, 127);
     }
-    #btn_consumeMeal_log, #btn_consumePotion_log {
+    #btn_consumeLuminous_log, #btn_consumePotion_log {
         background-color: rgba(0, 65, 129, 0.3);
         border: 1px solid rgb(145, 145, 145);
     }
