@@ -1,50 +1,112 @@
-## Introduction
+# Arcane Odyssey - Fishing Macro
 
-The application is designed for automatic fishing in Roblox Arcane Odyssey v1.20.10 and later.  
-Relevance may disappear with the update of fishing mechanics.  
+## ⚠️ IMPORTANT DISCLAIMER
 
-* USE IN YOUR OWN RISK \*
+**READ BEFORE USE:**
 
-## What does this application do
+This application is designed for automatic fishing in Roblox Arcane Odyssey v1.20.10 and later.
 
-~~Helps to spend the saved time on other useless activities~~  
-The app does the fishing for you.
+### Roblox Macroing Rules (Section 2.3)
 
-## CPU goes burning when running
-Open DB.json in a text editor ( Notebook is prefer )
-Change "swarmBaitInterval": 1.0 to desired value (e.g., 0.5, 1.5, 2.0) [ 1.0 = 1 second ]
-Save the file
-this will let the python scan more slower so it could save a bit for you.
+According to Roblox game rules:
 
-## Step-by-step guide how to use it
+- **Permitted Use (Rule 2.3.1)**: You may use this tool ONLY if you remain present at your computer and can respond to stimuli within the game
+- **Prohibited Use (Rule 2.3.2)**: Using alternate accounts for macroing will result in permanent bans
+- **Penalties (Rule 2.3.4)**: Moderators may roll back or completely wipe inventories, fishing progress, or journal statistics of violators
 
-Download zip file from:
-Original Author [ OUTDATED ]: [releases](https://github.com/Zombie-220/Fishing/releases)
-Reworked Version: [releases](https://github.com/LaoQiu-229/Fishing-Arcane-Odyssey)
+**YOU USE THIS APPLICATION ENTIRELY AT YOUR OWN RISK**
+**DO NOT USE THIS MACRO OVERNIGHT**
 
-Download zip from latest release
-Extract, go to dist and double click "Auto Fishing.exe"
+The authors are not responsible for:
+- Account bans or penalties
+- Inventory/progress rollbacks
+- Any consequences resulting from use
 
-### How to start fishing
+## What This Application Does
 
-**Note:** Before you start fishing, it is recommended to check the settings window to see if the keys match (most likely you will need to change them)
+The application automates the fishing process in Arcane Odyssey, handling rod casting and fish catching mechanics automatically.
 
-* Stand near the water (preferably where the character will not move)
-* Bring the camera as close as possible, then press the "O" key twice
-* Cast a fishing rod
-* Press the "START" button
-* Make yourself some tea
+## Requirements
 
-## Video guide
+- Windows Operating System
+- Roblox Arcane Odyssey (v1.20.10 or later)
+- Active presence at your computer (as per game rules)
 
-**Video guide** [here](https://youtu.be/HZDNSxpQz0Y)
+## Installation
 
-## Application components
+### Download
 
-* Main window
-* Settings window (saves all changes to a local database)
-* History window (records all actions while fishing)
+- **Reworked Version** (Recommended): [LaoQiu-229/Fishing-Arcane-Odyssey Releases](https://github.com/LaoQiu-229/Fishing-Arcane-Odyssey)
+- Original Version (Outdated): [Zombie-220/Fishing Releases](https://github.com/Zombie-220/Fishing/releases)
 
-## From author
-I will be glad for any feedback ~~keep the negative one for yourself~~ and help in maintaining the functionality of the application.
+### Setup
 
+1. Download the latest `.zip` file from releases
+2. Extract the archive to your desired location
+3. Navigate to the `dist` folder
+4. Run `Auto Fishing.exe`
+
+## How to Use
+
+### Initial Setup
+
+**Before first use:**
+1. Open the Settings window
+2. Verify and adjust keybindings to match your game controls
+3. Most users will need to customize default keys
+
+### Starting the Fishing Automation
+
+1. **Position your character** near water where they won't move or drift
+2. **Adjust camera view**: 
+   - Zoom in as close as possible to your character
+   - Press the "O" key twice to optimize view
+3. **Cast your fishing rod** manually
+4. **Press the "START" button** in the application
+5. **Have a tea**
+
+❌ **DON'T:**
+- Leave your computer unattended for extended periods
+- Use on alternate accounts
+- Use in dangerous/inaccessible areas
+- Ignore moderator messages
+
+## Compatibility Notes
+
+- Designed for Arcane Odyssey v1.20.10+
+- Functionality may break with fishing mechanic updates
+- Check for updates after game patches
+
+## Troubleshooting
+
+**Application won't start:**
+- Ensure you're running from the `dist` folder
+- Check Windows permissions
+- Run as administrator if needed
+
+**Keybindings not working:**
+- Open Settings window
+- Verify keys match your game controls
+- Test each keybinding individually
+
+**Not catching fish:**
+- Verify camera positioning
+- Check fishing rod is properly cast
+- Ensure character is stationary near water
+
+## Support & Feedback
+
+Feedback and contributions are welcome! 
+**Sent to eris421873@gmail.com if u have any feedback or need support!**
+
+- Report issues on GitHub
+- Submit pull requests for improvements
+- Share suggestions for new features
+
+---
+
+**Version Compatibility:** v1.20.10+  
+**Last Updated:** January 2025  
+**Maintainer:** LaoQiu-229
+
+*Remember: Using automation tools violates the spirit of the game. This tool is provided for educational purposes and convenience, but always prioritize fair play and compliance with game rules.*
