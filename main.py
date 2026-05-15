@@ -12,7 +12,6 @@ from modules.SimpleComponents import Button, Label
 from modules.GlobalVariables import *
 from modules.SettingsWindow import SettingsWindow
 from modules.LogsWindow import LogsWindow
-from modules.ImageClicker import ImageClicker
 
 def locateImage(img, threshold: float):
     screenshot = pyautogui.screenshot()
@@ -54,6 +53,51 @@ def changeImageSize(path: str, monitorSize: list[int], lastUsedSize: list[int]) 
     outIMG = cv2.resize(img, targetSize, cv2.INTER_LINEAR)
     cv2.imwrite(path, outIMG)
 
+KEY_DELAY = 0.05
+
+def _press(key: str, delay: float = KEY_DELAY) -> None:
+    keyboard.press_and_release(key)
+    time.sleep(delay)
+
+def navigateToStartArea(navKey: str) -> None:
+    """Open the navigation menu and move cursor to the start position."""
+    _press(navKey, 0.1)
+    for _ in range(20):
+        _press("d", 0.025)
+    time.sleep(0.1)
+
+def selectBait(baitChoice: str, navKey: str) -> None:
+    """
+    Navigate to the correct bait using only keyboard keys.
+    Call after the fishing rod has been cast / re-cast.
+    Magic : w w       enter
+    Giant : w w w     enter
+    Swarm : w w w w   enter
+    """
+    if baitChoice == "Normal":
+        return
+
+    navigateToStartArea(navKey)
+    time.sleep(0.1)
+
+    if baitChoice == "Magic":
+        up_presses = 2
+    elif baitChoice == "Giant":
+        up_presses = 3
+    elif baitChoice == "Swarm":
+        up_presses = 4
+    else:
+        return
+
+    for _ in range(up_presses):
+        _press("w")
+
+    _press("enter")
+    time.sleep(0.1)
+
+    _press(navKey, 0.1)
+
+
 class MainWindow(QMainWindow):
     title: str = "title"
     isFishing: bool = False
@@ -83,14 +127,7 @@ class MainWindow(QMainWindow):
         self.move((screenSize.width() // 2) - (self.width() // 2), 0)
         self.setStyleSheet(CSS)
 
-        self.fishingThread = threading.Thread(target = self.fishing)
-        
-        # Initialize ImageClicker
-        try:
-            self.imageClicker = ImageClicker()
-        except FileNotFoundError as e:
-            print(f"AutoHotkey not found: {e}")
-            self.imageClicker = None
+        self.fishingThread = threading.Thread(target=self.fishing)
 
         self.settingsWindow = SettingsWindow(self)
         self.logsWindow = LogsWindow(self)
@@ -154,29 +191,19 @@ class MainWindow(QMainWindow):
         self.logsWindow.close()
         self.close()
 
-    def clickBaitWithAHK(self, baitImage):
-        """Click on special bait using AHK and move mouse back to center"""
-        baitCoord = locateImage(baitImage, 0.8)
-        if baitCoord and self.imageClicker:
-            # Get center of the bait image
-            h, w = baitImage.shape[:2]
-            centerX = baitCoord[0] + w // 2
-            centerY = baitCoord[1] + h // 2
-            # Click and automatically move back to center (AHK uses SysGet for screen dimensions)
-            self.imageClicker.click(centerX, centerY, move_to_center=True)
-            return True
-        return False
+    # ── helpers ──────────────────────────────────────────────
+    def _navKey(self) -> str:
+        return str(self.settingsWindow.navigationKey)
 
-    def getBaitImage(self):
-        """Get the bait image based on settings"""
-        if self.settingsWindow.baitChoice == "Swarm":
-            return IMG_SWARM
-        elif self.settingsWindow.baitChoice == "Giant":
-            return IMG_GIANT
-        elif self.settingsWindow.baitChoice == "Magic":
-            return IMG_MAGIC
-        return None
+    def _baitChoice(self) -> str:
+        return self.settingsWindow.baitChoice
 
+    def _selectBait(self) -> None:
+        """Trigger bait selection via pure keyboard navigation."""
+        if self._baitChoice() != "Normal":
+            selectBait(self._baitChoice(), self._navKey())
+
+    # ── fishing loop ─────────────────────────────────────────
     def fishing(self) -> None:
         while self.isVisible():
             if self.isFishing:
@@ -188,68 +215,60 @@ class MainWindow(QMainWindow):
                     self.tryCatchFish = True
                     self.startThisTry = time.time()
                     while self.tryCatchFish:
-                        pyautogui.click(button = "left")
+                        pyautogui.click(button="left")
                         timeForThisTry = time.time() - self.startThisTry
                         
                         # Check for loot
-                        if (locateImage(IMG_FISH, 0.8) or locateImage(IMG_JUNK, 0.8)) and (timeForThisTry <= self.settingsWindow.timeForTry):
-                            self.addFishCount()
+                        if (locateImage(IMG_FISH, 0.7) or locateImage(IMG_JUNK, 0.7)) and (timeForThisTry <= self.settingsWindow.timeForTry):
                             self.endTry("fish")
-                        else: pyautogui.click(button = "left")
+                            self.addFishCount()
+                        else:
+                            pyautogui.click(button="left")
                         
                         if locateImage(IMG_TREASURE, 0.7) and (timeForThisTry <= self.settingsWindow.timeForTry) and self.tryCatchFish:
-                            self.addFishCount()
                             self.endTry("treasure")
-                        else: pyautogui.click(button = "left")
+                            self.addFishCount()
+                        else:
+                            pyautogui.click(button="left")
                         
                         if locateImage(IMG_SUNKEN, 0.8) and (timeForThisTry <= self.settingsWindow.timeForTry) and self.tryCatchFish:
-                            self.addFishCount()
                             self.endTry("sunken")
-                        else: pyautogui.click(button = "left")
+                            self.addFishCount()
+                        else:
+                            pyautogui.click(button="left")
                         
                         if timeForThisTry > self.settingsWindow.timeForTry:
                             time.sleep(1)
                             self.endTry("timeError")
-                        else: pyautogui.click(button = "left")
+                        else:
+                            pyautogui.click(button="left")
 
                 elif self.timeForWait >= self.maxTimeForWait:
-                    if locateImage(IMG_DISCONNECTED, 0.8): self.shouldStopFishing = True
-                    else: self.endTry("timeError")
+                    if locateImage(IMG_DISCONNECTED, 0.8):
+                        self.shouldStopFishing = True
+                    else:
+                        self.endTry("timeError")
 
                 elif (self.checkLuminousTimer >= self.settingsWindow.luminousTimer) and (self.settingsWindow.useLuminous):
                     keyboard.press_and_release(f"{self.settingsWindow.luminousKey}")
-                    pyautogui.click(button = "left")
+                    pyautogui.click(button="left")
                     time.sleep(2)
                     keyboard.press_and_release(f"{self.settingsWindow.rodKey}")
+                    self._selectBait()
                     time.sleep(0.1)
-                    
-                    # Check if special bait
-                    if self.settingsWindow.baitChoice != "Normal":
-                        baitImg = self.getBaitImage()
-                        if baitImg is not None:
-                            self.clickBaitWithAHK(baitImg)
-                        time.sleep(0.1)
-                    
-                    pyautogui.click(button = "left")
+                    pyautogui.click(button="left")
                     self.logsWindow.logs.append([time.localtime(), "consumeLuminous"])
                     self.startFishingTimer = time.time()
                     self.startCheckLuminousTimer = time.time()
                     
                 elif (self.checkPotionTimer >= self.settingsWindow.potionTimer) and (self.settingsWindow.usePotion):
                     keyboard.press_and_release(f"{self.settingsWindow.potionKey}")
-                    pyautogui.click(button = "left")
+                    pyautogui.click(button="left")
                     time.sleep(0.75)
                     keyboard.press_and_release(f"{self.settingsWindow.rodKey}")
+                    self._selectBait()
                     time.sleep(0.1)
-                    
-                    # Check if special bait
-                    if self.settingsWindow.baitChoice != "Normal":
-                        baitImg = self.getBaitImage()
-                        if baitImg is not None:
-                            self.clickBaitWithAHK(baitImg)
-                        time.sleep(0.1)
-                    
-                    pyautogui.click(button = "left")
+                    pyautogui.click(button="left")
                     self.logsWindow.logs.append([time.localtime(), "consumePotion"])
                     self.startFishingTimer = time.time()
                     self.startCheckPotionTimer = time.time()
@@ -257,33 +276,25 @@ class MainWindow(QMainWindow):
                 time.sleep(0.25)
 
     def endTry(self, log: str) -> None:
-        """End try for all bait types"""
         rodKey = f"{self.settingsWindow.rodKey}"
         self.tryCatchFish = False
         self.startFishingTimer = time.time()
         self.logsWindow.logs.append([time.localtime(), log])
         time.sleep(0.2)
         keyboard.press_and_release(rodKey)
-        time.sleep(0.1)
         keyboard.press_and_release(rodKey)
-        time.sleep(0.1)
-        
-        # Handle special bait selection
-        if self.settingsWindow.baitChoice != "Normal":
-            baitImg = self.getBaitImage()
-            if baitImg is not None:
-                self.clickBaitWithAHK(baitImg)
-            
-            # Special wait time for Swarm bait
-            if self.settingsWindow.baitChoice == "Swarm":
-                if self.settingsWindow.useLuminous:
-                    time.sleep(2.5)
-                else:
-                    time.sleep(2.25)
+
+        self._selectBait()
+
+        if self._baitChoice() == "Swarm":
+            if self.settingsWindow.useLuminous:
+                time.sleep(2.5)
             else:
-                time.sleep(0.1)
-        
-        pyautogui.click(button = "left")
+                time.sleep(2.25)
+        else:
+            time.sleep(0.2)
+
+        pyautogui.click(button="left")
 
     def addFishCount(self) -> None:
         self.fishCount += 1
@@ -307,31 +318,25 @@ if __name__ == "__main__":
         Rf'{os.path.abspath(os.path.dirname(sys.argv[0]))}/images/forScript/junk.png',
         Rf'{os.path.abspath(os.path.dirname(sys.argv[0]))}/images/forScript/sunken.png',
         Rf'{os.path.abspath(os.path.dirname(sys.argv[0]))}/images/forScript/disconnected.png',
-        Rf'{os.path.abspath(os.path.dirname(sys.argv[0]))}/images/forScript/swarm.png',
-        Rf'{os.path.abspath(os.path.dirname(sys.argv[0]))}/images/forScript/giant.png',
-        Rf'{os.path.abspath(os.path.dirname(sys.argv[0]))}/images/forScript/magic.png'
     ]
 
     actualScreenSize = [user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)]
     lastUsedSize = getLastSize()
-    if lastUsedSize[0] != actualScreenSize[0] or lastUsedSize[1] != actualScreenSize[1]:
+    if lastUsedSize[0] != actualScreenSize[0]:
         for i in allImagesPath:
             changeImageSize(i, actualScreenSize, lastUsedSize)
         changeLastSize(actualScreenSize)
 
-    IMG_START = cv2.imread(allImagesPath[0])
-    IMG_FISH = cv2.imread(allImagesPath[1])
-    IMG_TREASURE = cv2.imread(allImagesPath[2])
-    IMG_JUNK = cv2.imread(allImagesPath[3])
-    IMG_SUNKEN = cv2.imread(allImagesPath[4])
+    IMG_START       = cv2.imread(allImagesPath[0])
+    IMG_FISH        = cv2.imread(allImagesPath[1])
+    IMG_TREASURE    = cv2.imread(allImagesPath[2])
+    IMG_JUNK        = cv2.imread(allImagesPath[3])
+    IMG_SUNKEN      = cv2.imread(allImagesPath[4])
     IMG_DISCONNECTED = cv2.imread(allImagesPath[5])
-    IMG_SWARM = cv2.imread(allImagesPath[6])
-    IMG_GIANT = cv2.imread(allImagesPath[7])
-    IMG_MAGIC = cv2.imread(allImagesPath[8])
 
     window = MainWindow("Auto fishing")
     window.show()
     window.fishingThread.start()
     sys.exit(app.exec())
 
-#  pyinstaller -w -F -i"images\icons\APP_ICON.ico" -n "auto fishing" main.py
+#  pyinstaller -w -F -i"images\icons\APP_ICON.ico" -n "Auto Fishing" main.py
