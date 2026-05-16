@@ -1,30 +1,34 @@
 from PyQt6 import QtWidgets, QtGui, QtCore
 
+
+# ── Button ────────────────────────────────────────────────────────────────────
+
 class Button(QtWidgets.QPushButton):
     def __init__(self, parent: QtWidgets.QMainWindow, content: str | QtGui.QIcon,
                  x: int, y: int, width: int, height: int,
-                 objectName: str, func = None):
+                 objectName: str, func=None):
         super().__init__(parent)
-        
+
         self.setGeometry(x, y, width, height)
         self.setObjectName(objectName)
 
         if type(content) == str:
             self.setText(content)
         elif type(content) == QtGui.QIcon:
-            self.setIcon(content) 
+            self.setIcon(content)
 
         if func != None:
             self.clicked.connect(func)
 
 
+# ── Label ─────────────────────────────────────────────────────────────────────
 
 class Label(QtWidgets.QLabel):
     def __init__(self, parent: QtWidgets.QMainWindow,
                  x: int, y: int, width: int, height: int,
                  objectName: str, content: str | QtGui.QPixmap):
         super().__init__(parent)
-        
+
         self.setGeometry(x, y, width, height)
         self.setObjectName(objectName)
         self.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
@@ -35,6 +39,7 @@ class Label(QtWidgets.QLabel):
             self.setPixmap(content)
 
 
+# ── Entry ─────────────────────────────────────────────────────────────────────
 
 class Entry(QtWidgets.QLineEdit):
     def __init__(self, parent: QtWidgets.QMainWindow,
@@ -53,21 +58,21 @@ class Entry(QtWidgets.QLineEdit):
             self.setReadOnly(False)
 
 
+# ── WindowTitleBar ────────────────────────────────────────────────────────────
 
 class WindowTitleBar(QtWidgets.QLabel):
     def __init__(self, parent: QtWidgets.QMainWindow) -> None:
         super().__init__(parent)
-        
-        self.icon = parent.icon
 
+        self.icon = parent.icon
         self.parent = parent
         self.resize(parent.width(), 30)
-        self.move(0,0)
+        self.move(0, 0)
         self.setObjectName("TitleBar")
 
         labelLogo = QtWidgets.QLabel(self)
         labelLogo.setPixmap(self.icon)
-        labelLogo.setFixedSize(30,30)
+        labelLogo.setFixedSize(30, 30)
         labelName = QtWidgets.QLabel(parent.title, self)
         labelName.setGeometry(35, 0, parent.width(), 30)
 

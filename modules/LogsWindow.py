@@ -4,6 +4,9 @@ from time import struct_time
 from modules.GlobalVariables import CSS, EXIT_ICON
 from modules.SimpleComponents import WindowTitleBar, Button
 
+
+# ── Logs window ───────────────────────────────────────────────────────────────
+
 class LogsWindow(QtWidgets.QMainWindow):
     logs: list = []
 
@@ -30,12 +33,12 @@ class LogsWindow(QtWidgets.QMainWindow):
 
         self.__widget = QtWidgets.QWidget()
         self.__widget.setObjectName("widget")
-        self.__vBox = QtWidgets.QVBoxLayout()  
+        self.__vBox = QtWidgets.QVBoxLayout()
         self.__vBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
         self.__widget.setLayout(self.__vBox)
 
         self.__scrollArea = QtWidgets.QScrollArea(self)
-        self.__scrollArea.move(2,32)
+        self.__scrollArea.move(2, 32)
         self.__scrollArea.setFixedSize(self.width() - 4, self.height() - 34)
         self.__scrollArea.setObjectName("scrollArea")
         self.__scrollArea.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
@@ -47,9 +50,11 @@ class LogsWindow(QtWidgets.QMainWindow):
         self.timer.setInterval(500)
         self.timer.start()
 
+    # ── Scroll ────────────────────────────────────────────────
     def scrollToBottom(self, min, max) -> None:
         self.__scrollArea.verticalScrollBar().setValue(max)
 
+    # ── Log entries ───────────────────────────────────────────
     def addLog(self, time: struct_time, reasonType: str) -> None:
         objectName = f"btn_{reasonType}_log"
         if reasonType == "fish":

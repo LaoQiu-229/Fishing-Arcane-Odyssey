@@ -3,11 +3,17 @@ import sys, os
 
 app = QtWidgets.QApplication(sys.argv)
 
-APP_ICON = QtGui.QPixmap(Rf'{os.path.abspath(os.path.dirname(sys.argv[0]))}\images\icons\APP_ICON.png').scaled(
-                        30, 30, transformMode = QtCore.Qt.TransformationMode.SmoothTransformation)
+
+# ── Icons ─────────────────────────────────────────────────────────────────────
+
+APP_ICON     = QtGui.QPixmap(Rf'{os.path.abspath(os.path.dirname(sys.argv[0]))}\images\icons\APP_ICON.png').scaled(
+                   30, 30, transformMode=QtCore.Qt.TransformationMode.SmoothTransformation)
 SETTING_ICON = QtGui.QIcon(Rf'{os.path.abspath(os.path.dirname(sys.argv[0]))}\images\icons\SETTING_ICON.png')
-EXIT_ICON = QtGui.QIcon(Rf'{os.path.abspath(os.path.dirname(sys.argv[0]))}\images\icons\EXIT_ICON.png')
-LOGS_ICON = QtGui.QIcon(Rf'{os.path.abspath(os.path.dirname(sys.argv[0]))}\images\icons\LOGS_ICON.png')
+EXIT_ICON    = QtGui.QIcon(Rf'{os.path.abspath(os.path.dirname(sys.argv[0]))}\images\icons\EXIT_ICON.png')
+LOGS_ICON    = QtGui.QIcon(Rf'{os.path.abspath(os.path.dirname(sys.argv[0]))}\images\icons\LOGS_ICON.png')
+
+
+# ── Stylesheet ────────────────────────────────────────────────────────────────
 
 CSS = '''
     * {
@@ -31,7 +37,7 @@ CSS = '''
         font-size: 12px;
     }
 
-    
+
     #btn_standart {
         background-color: rgba(0, 65, 129, 1);
         border: 1px solid rgb(145, 145, 145);
@@ -64,7 +70,7 @@ CSS = '''
         border: 1px solid rgb(145, 0, 0);
         selection-background-color: rgba(145, 0, 0, 0.6);
     }
-    
+
 
     #scrollArea {
         background-color: rgba(0,0,0,0);
@@ -81,7 +87,7 @@ CSS = '''
     QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         background-color: rgba(0, 0, 0, 1);
     }
-    
+
 
     #btn_start_log {
         background-color: rgb(20, 72, 21);
