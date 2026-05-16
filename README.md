@@ -6,9 +6,9 @@
 
 This application is designed for automatic fishing in Roblox Arcane Odyssey v1.20.10 and later.
 
-### Roblox Macroing Rules (Section 2.3)
+### Arcane Odyssey Rules (Section 2.3)
 
-According to Roblox game rules:
+According to Arcane Odyssey rules:
 
 - **Permitted Use (Rule 2.3.1)**: You may use this tool ONLY if you remain present at your computer and can respond to stimuli within the game
 - **Prohibited Use (Rule 2.3.2)**: Using alternate accounts for macroing will result in permanent bans
