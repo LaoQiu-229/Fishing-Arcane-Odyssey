@@ -1,1 +1,1 @@
-{"settings": [{"rodKey": 0, "luminousKey": 9, "potionKey": 8, "useLuminous": false, "usePotion": false, "luminousTimer": 120, "potionTimer": 300, "timeForTry": 22.5, "baitChoice": "Swarm", "navigationKey": "\\"}], "screenSize": [{"width": 1920, "height": 1200}]}
+{"settings": [{"rodKey": 0, "luminousKey": 9, "potionKey": 8, "useLuminous": false, "usePotion": false, "luminousTimer": 120, "potionTimer": 300, "timeForTry": 22.5, "baitChoice": "Normal", "navigationKey": "\\"}], "screenSize": [{"width": 1920, "height": 1200}]}
