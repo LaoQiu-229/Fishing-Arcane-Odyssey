@@ -39,13 +39,6 @@ The application automates the fishing process in Arcane Odyssey, handling rod ca
 - **Reworked Version** (Recommended): [LaoQiu-229/Fishing-Arcane-Odyssey Releases](https://github.com/LaoQiu-229/Fishing-Arcane-Odyssey)
 - Original Version (Outdated): [Zombie-220/Fishing Releases](https://github.com/Zombie-220/Fishing/releases)
 
-### Setup
-
-1. Download the latest `.zip` file from releases
-2. Extract the archive to your desired location
-3. Navigate to the `dist` folder
-4. Run `Auto Fishing.exe`
-
 ## How to Use
 
 ### Initial Setup
@@ -79,11 +72,6 @@ The application automates the fishing process in Arcane Odyssey, handling rod ca
 
 ## Troubleshooting
 
-**Application won't start:**
-- Ensure you're running from the `dist` folder
-- Check Windows permissions
-- Run as administrator if needed
-
 **Keybindings not working:**
 - Open Settings window
 - Verify keys match your game controls
@@ -106,7 +94,7 @@ Feedback and contributions are welcome!
 ---
 
 **Version Compatibility:** v1.20.10+  
-**Last Updated:** January 2025  
+**Last Updated:** May 2026
 **Maintainer:** LaoQiu-229
 
 *Remember: Using automation tools violates the spirit of the game. This tool is provided for educational purposes and convenience, but always prioritize fair play and compliance with game rules.*
